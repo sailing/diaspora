@@ -25,12 +25,11 @@ describe Stream::Base do
       before do
         bob.post(:status_message, :text => "sup", :to => bob.aspects.first.id)
         @liked_status = bob.posts.last
-        Factory(:like, :target => @liked_status, :author => alice.person)
-        # @stream.stub_chain(:posts => :for_a_stream).and_return(Post.where(:id => @liked_status.id))
+        @like = Factory(:like, :target => @liked_status, :author => alice.person)
       end
 
       it "marks the posts as liked" do
-        @stream.stream_posts.first.liked.should be_true
+        @stream.stream_posts.first.user_like.id.should == @like.id
       end
     end
   end

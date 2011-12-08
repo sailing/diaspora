@@ -13,6 +13,13 @@ class Like < ActiveRecord::Base
   include Diaspora::Relayable
   include Diaspora::Socketable
 
+
+  # NOTE API V1 to be extracted
+  acts_as_api
+  api_accessible :backbone do |t|
+    t.add :id
+  end
+
   xml_attr :positive
   xml_attr :diaspora_handle
 

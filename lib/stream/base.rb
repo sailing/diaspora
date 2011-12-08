@@ -115,10 +115,14 @@ class Stream::Base
   # @return [void]
   def like_posts_for_stream!(posts)
     likes = Like.where(:target_id => posts.map(&:id), :target_type => "Post")
-    liked_post_ids = likes.select(:target_id).map(&:target_id)
+
+    like_hash = likes.inject({}) do |hash, like|
+      hash[like.target_id] = like
+      hash
+    end
 
     posts.each do |post|
-      post.liked = liked_post_ids.include?(post.id)
+      post.user_like = like_hash[post.id]
     end
   end
 

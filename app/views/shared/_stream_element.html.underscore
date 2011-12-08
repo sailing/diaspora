@@ -114,8 +114,8 @@
         </span>
 
         <span class="like_action">
-          <% if(liked === true) { %>
-          <a href="/posts/<%= id %>/likes/<%= 1 %>" class="unlike" data-method='delete' data-remote='true' rel='nofollow'>
+          <% if(user_like !== null) { %>
+          <a href="/posts/<%= id %>/likes/<%= user_like.id %>" class="unlike" data-method='delete' data-remote='true' rel='nofollow'>
               Unlike
             </a>
           <% } else { %>
