@@ -46,35 +46,10 @@ class Stream::Base
     Post.scoped
   end
 
-  # @return [ActiveRecord::Relation<Post>]
+  # @return [Array<Post>]
   def stream_posts
-    posts = self.posts.for_a_stream(max_time, order, self.user)
-
-    if @user
-      post_ids = posts.map{ |p| p.id }
-
-      if likes = Like.where(:target_id => post_ids)
-        like_hash = likes.inject({}) do |h, curr|
-          if h[curr.target_type]
-            h[curr.target_type] << curr.target_id
-          else
-            h[curr.target_type] = [curr.target_id]
-          end
-          h
-        end
-
-        if like_hash["Post"]
-          posts.each do |post|
-            post.liked = like_hash["Post"].include?(post.id)
-          end
-        else
-          posts
-        end
-      else
-        posts
-      end
-    else
-      posts
+    self.posts.for_a_stream(max_time, order, self.user).tap do |posts|
+      like_posts_for_stream!(posts) #some sql person could probably do this with joins.
     end
   end
 
@@ -90,7 +65,7 @@ class Stream::Base
     I18n.translate('aspects.selected_contacts.view_all_contacts')
   end
 
-  # @return [String]
+  # @return [String] def contacts_title 'change me in lib/base_stream.rb!'
   def contacts_title
     'change me in lib/base_stream.rb!'
   end
@@ -136,7 +111,17 @@ class Stream::Base
     @order ||= 'created_at'
   end
 
-  private
+  protected
+  # @return [void]
+  def like_posts_for_stream!(posts)
+    likes = Like.where(:target_id => posts.map(&:id), :target_type => "Post")
+    liked_post_ids = likes.select(:target_id).map(&:target_id)
+
+    posts.each do |post|
+      post.liked = liked_post_ids.include?(post.id)
+    end
+  end
+
   # @return [Hash]
   def publisher_opts
     {}
