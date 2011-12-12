@@ -5,9 +5,10 @@
         = link_to t('users.privacy_settings.stop_ignoring'), block_path(@block),
           :method => :delete,
           :class => "button"
-
-      - else
+      - elsif current_user.contact_for(person) and current_user.contact_for(person).receiving
         = aspect_membership_dropdown(contact, person, 'right')
+      - else
+        = button_to('Follow', aspect_memberships_path(:person_id => person.id, :aspect_id => current_user.following_aspect.id))
     - elsif user_signed_in? && current_user.person == person
       = link_to t('people.profile_sidebar.edit_my_profile'), edit_profile_path, :class => 'button creation'
 

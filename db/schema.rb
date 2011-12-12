@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111207233503) do
+ActiveRecord::Schema.define(:version => 20111212001735) do
 
   create_table "account_deletions", :force => true do |t|
     t.string  "diaspora_handle"
@@ -41,12 +41,13 @@ ActiveRecord::Schema.define(:version => 20111207233503) do
   add_index "aspect_visibilities", ["shareable_id", "shareable_type"], :name => "index_aspect_visibilities_on_shareable_id_and_shareable_type"
 
   create_table "aspects", :force => true do |t|
-    t.string   "name",                               :null => false
-    t.integer  "user_id",                            :null => false
+    t.string   "name",                                :null => false
+    t.integer  "user_id",                             :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "contacts_visible", :default => true, :null => false
+    t.boolean  "contacts_visible", :default => true,  :null => false
     t.integer  "order_id"
+    t.boolean  "following",        :default => false
   end
 
   add_index "aspects", ["user_id", "contacts_visible"], :name => "index_aspects_on_user_id_and_contacts_visible"
@@ -165,6 +166,13 @@ ActiveRecord::Schema.define(:version => 20111207233503) do
 
   add_index "messages", ["author_id"], :name => "index_messages_on_author_id"
   add_index "messages", ["conversation_id"], :name => "messages_conversation_id_fk"
+
+  create_table "note_extensions", :force => true do |t|
+    t.text     "text",       :limit => 16777215
+    t.integer  "post_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "notification_actors", :force => true do |t|
     t.integer  "notification_id"

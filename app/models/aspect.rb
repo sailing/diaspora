@@ -16,7 +16,7 @@ class Aspect < ActiveRecord::Base
 
   validates_uniqueness_of :name, :scope => :user_id, :case_sensitive => false
 
-  attr_accessible :name, :contacts_visible, :order_id
+  attr_accessible :name, :contacts_visible, :order_id, :following
 
   before_validation do
     name.strip!

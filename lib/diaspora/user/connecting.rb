@@ -18,7 +18,8 @@ module Diaspora
           contact.receiving = true
         end
 
-        contact.aspects << aspect
+        contact.aspects << self.following_aspect
+        contact.aspects << aspect unless aspect == self.following_aspect
         contact.save
 
         if notification = Notification.where(:target_id => person.id).first

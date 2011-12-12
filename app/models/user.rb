@@ -52,6 +52,8 @@ class User < ActiveRecord::Base
   before_save :guard_unconfirmed_email,
               :save_person!
 
+  after_create :seed_aspects
+
   before_create :infer_email_from_invitation_provider
 
   attr_accessible :getting_started,
@@ -388,7 +390,12 @@ class User < ActiveRecord::Base
     self.person = person
   end
 
+  def following_aspect
+    self.aspects.where(:following => true).first
+  end
+
   def seed_aspects
+    self.aspects.create(:name => I18n.t('aspects.seed.following'), :following => true, :contacts_visible => false)
     self.aspects.create(:name => I18n.t('aspects.seed.family'))
     self.aspects.create(:name => I18n.t('aspects.seed.friends'))
     self.aspects.create(:name => I18n.t('aspects.seed.work'))

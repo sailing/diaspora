@@ -45,7 +45,6 @@ class InvitationsController < Devise::InvitationsController
     user.accept_invitation!(params[:user])
 
     if user.persisted? && user.person && user.person.persisted?
-      user.seed_aspects
       flash[:notice] = I18n.t 'registrations.create.success'
       sign_in_and_redirect(:user, user)
     else
