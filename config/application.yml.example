@@ -101,6 +101,7 @@ defaults: &defaults
   # Enable extensive logging to websocket server.
   socket_debug : false
 
+
   # Airbrake api key, send failures to http://projectname.airbrake.io/ (Former Hoptoad)
   airbrake_api_key: ''
 

@@ -31,6 +31,9 @@ gem "rpm_contrib", "~> 2.1.7"
 
 group :production do # we don't install these on travis to speed up test runs
   gem 'rack-ssl', :require => 'rack/ssl'
+  # reporting
+  gem 'airbrake'
+  gem 'newrelic_rpm'
   gem 'rack-google-analytics', :require => 'rack/google-analytics'
   gem 'rack-piwik', :require => 'rack/piwik'
 end
